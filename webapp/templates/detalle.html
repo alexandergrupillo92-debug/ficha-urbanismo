@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>{{ item.grupo }}</h1>
+<p class="progreso">Sugerido: {{ item.unidad_sugerida }}</p>
+
+<form method="POST" enctype="multipart/form-data">
+  <label>Identificador de unidad</label>
+  <input type="text" name="unidad" value="{{ item.unidad_sugerida }}">
+
+  <label>Estatus de ocupación</label>
+  <select name="estatus">
+    {% for op in logic.OPC_ESTATUS %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Nombre del propietario</label>
+  <input type="text" name="propietario" placeholder="Sin Identificar">
+
+  <label>Número de teléfono</label>
+  <input type="tel" name="telefono" placeholder="Ej: 0414-1234567">
+
+  <label>Friso</label>
+  <select name="friso">
+    {% for op in logic.OPC_FRISO %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Techo / Cubierta</label>
+  <select name="techo">
+    {% for op in opc_techo %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Baños (cantidad y condición)</label>
+  <input type="text" name="banos" placeholder="Ej: 1, Completo">
+
+  <label>Electricidad en la vivienda</label>
+  <select name="electricidad_unidad">
+    {% for op in logic.OPC_ELECTRICIDAD %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Patología</label>
+  <input type="text" name="patologia" placeholder="Ninguna, Grietas, Fisuras, Humedad, Filtraciones">
+
+  <label>Fotografía (opcional)</label>
+  <input type="file" name="foto" accept="image/*" capture="environment">
+
+  <button type="submit">Guardar unidad</button>
+</form>
+{% endblock %}

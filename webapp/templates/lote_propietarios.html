@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Propietarios del lote</h1>
+<p class="progreso">{{ seleccionados|length }} unidades</p>
+
+<form method="POST" action="{{ url_for('lote_guardar') }}" enctype="multipart/form-data">
+  <input type="hidden" name="friso" value="{{ friso }}">
+  <input type="hidden" name="techo" value="{{ techo }}">
+  <input type="hidden" name="banos" value="{{ banos }}">
+  <input type="hidden" name="electricidad" value="{{ electricidad }}">
+  <input type="hidden" name="patologia" value="{{ patologia }}">
+
+  {% for item in seleccionados %}
+  <div class="fila-persona">
+    <strong>{{ item.grupo }} - {{ item.unidad_sugerida }}</strong>
+    <input type="hidden" name="grupo" value="{{ item.grupo }}">
+    <input type="hidden" name="unidad_sugerida" value="{{ item.unidad_sugerida }}">
+
+    <label>Propietario</label>
+    <input type="text" name="propietario" placeholder="Sin Identificar">
+
+    <label>Teléfono</label>
+    <input type="tel" name="telefono" placeholder="Ej: 0414-1234567">
+
+    <label>Estatus</label>
+    <select name="estatus">
+      {% for op in logic.OPC_ESTATUS %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+    </select>
+
+    <label>Fotografía (opcional)</label>
+    <input type="file" name="foto" accept="image/*" capture="environment">
+  </div>
+  {% endfor %}
+
+  <button type="submit">Guardar {{ seleccionados|length }} unidades</button>
+</form>
+{% endblock %}

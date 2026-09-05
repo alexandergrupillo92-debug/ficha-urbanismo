@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Datos generales</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <label>Fecha de inspección</label>
+  <input type="text" name="fecha_inspeccion" placeholder="dd/mm/aaaa">
+
+  <label>Ubicación / Sector</label>
+  <input type="text" name="ubicacion">
+
+  <label>Parroquia</label>
+  <select name="parroquia">
+    {% for op in logic.OPC_PARROQUIA %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Tenencia de la tierra</label>
+  <select name="tenencia">
+    {% for op in logic.OPC_TENENCIA %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Riesgos geológicos</label>
+  <input type="text" name="riesgos" placeholder="Ninguno">
+
+  <label>Aceras y brocales</label>
+  <select name="aceras">
+    {% for op in logic.OPC_ACERAS %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Aguas blancas</label>
+  <select name="aguas_blancas">
+    {% for op in logic.OPC_AGUAS_BLANCAS %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Aguas servidas</label>
+  <select name="aguas_servidas">
+    {% for op in logic.OPC_AGUAS_SERVIDAS %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Sistema de saneamiento</label>
+  <select name="saneamiento">
+    {% for op in logic.OPC_SANEAMIENTO %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Sistema eléctrico general</label>
+  <select name="electricidad">
+    {% for op in logic.OPC_ELECTRICIDAD %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <h2>Tipología</h2>
+  <label>¿Edificios o Casas?</label>
+  <select name="tipo" id="tipo" onchange="mostrarCampos()">
+    {% for op in logic.OPC_TIPO %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <div id="campos_edificios">
+    <label>Torres</label>
+    <input type="number" name="torres" min="1">
+    <label>Pisos (incluyendo PB)</label>
+    <input type="number" name="pisos" min="1">
+    <label>Aptos por nivel</label>
+    <input type="number" name="aptos" min="1">
+  </div>
+
+  <div id="campos_casas" style="display:none;">
+    <label>Calles</label>
+    <input type="number" name="calles" min="1">
+    <label>Casas por calle</label>
+    <input type="number" name="casas" min="1">
+  </div>
+
+  <button type="submit">Generar plan y comenzar registro</button>
+</form>
+
+<script>
+function mostrarCampos() {
+  var tipo = document.getElementById("tipo").value;
+  document.getElementById("campos_edificios").style.display = (tipo === "Edificios") ? "block" : "none";
+  document.getElementById("campos_casas").style.display = (tipo === "Casas") ? "block" : "none";
+}
+mostrarCampos();
+</script>
+{% endblock %}

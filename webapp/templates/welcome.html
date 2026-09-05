@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Ficha de Inspección<br>de Urbanismo</h1>
+<p style="font-size:13px;color:#5B5346;">Alcaldía del Municipio Autónomo de Brión — Dirección de Hábitat y Vivienda</p>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <label>Nombre del urbanismo</label>
+  <input type="text" name="urbanismo" required autofocus>
+  <button type="submit">Comenzar / Continuar</button>
+</form>
+{% endblock %}

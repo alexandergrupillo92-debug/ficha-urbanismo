@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>¡Levantamiento completo!</h1>
+<div class="info">El PDF fue generado correctamente.</div>
+
+<a class="boton" href="{{ url_for('descargar', nombre_archivo=nombre_archivo) }}">Descargar PDF</a>
+<a class="boton secundario" href="{{ url_for('nuevo') }}">Registrar otro urbanismo</a>
+{% endblock %}

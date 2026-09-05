@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Carga por lote</h1>
+<p class="progreso">
+  Desde: {{ pendientes[0].grupo }} - {{ pendientes[0].unidad_sugerida }}<br>
+  Máximo disponible: {{ pendientes|length }}
+</p>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <label>Cantidad de unidades consecutivas</label>
+  <input type="number" name="cantidad" min="1" max="{{ pendientes|length }}" required>
+
+  <h2>Características comunes del lote</h2>
+
+  <label>Friso</label>
+  <select name="friso">
+    {% for op in logic.OPC_FRISO %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Techo / Cubierta</label>
+  <select name="techo">
+    {% for op in opc_techo %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Condición de baños</label>
+  <select name="banos">
+    {% for op in logic.OPC_BANOS_COND %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Electricidad en estas unidades</label>
+  <select name="electricidad">
+    {% for op in logic.OPC_ELECTRICIDAD %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Patología común</label>
+  <input type="text" name="patologia" placeholder="Ninguna">
+
+  <button type="submit">Continuar: registrar propietarios</button>
+</form>
+{% endblock %}
