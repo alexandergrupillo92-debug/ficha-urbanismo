@@ -10,6 +10,54 @@
   <label>Ubicación / Sector</label>
   <input type="text" name="ubicacion">
 
+  <label>Ente ejecutor</label>
+  <input type="text" name="ente_ejecutor" placeholder="Ej: Secretaría de Vivienda de la Gobernación de Miranda">
+
+  <label>Inspector (opcional)</label>
+  <input type="text" name="inspector" placeholder="Dejar en blanco si no se desea registrar">
+
+  <label>Observaciones generales (opcional)</label>
+  <textarea name="observaciones_generales" rows="4" placeholder="Cualquier nota adicional sobre el urbanismo"></textarea>
+
+  <h2>Tipología, tecnología y modelo de vivienda</h2>
+
+  <label>Tipología</label>
+  <select name="tipologia">
+    <option value="Unifamiliar">Unifamiliar</option>
+    <option value="Bifamiliar">Bifamiliar</option>
+    <option value="Multifamiliar">Multifamiliar</option>
+  </select>
+
+  <label>Tecnología constructiva</label>
+  <select name="tecnologia_constructiva">
+    <option value="Kit Estructural">Kit Estructural</option>
+    <option value="Concreto Armado">Concreto Armado</option>
+    <option value="Estructura Aporticada">Estructura Aporticada</option>
+  </select>
+
+  <label>Área de construcción (m²)</label>
+  <input type="number" name="area_m2" min="0" step="0.01" placeholder="Ej: 72">
+
+  <label>Cantidad de cuartos</label>
+  <select name="cuartos">
+    <option value="1">1</option>
+    <option value="2" selected>2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5+">5 o más</option>
+  </select>
+
+  <label>Cantidad de baños del modelo</label>
+  <select name="banos_modelo">
+    <option value="1">1</option>
+    <option value="2" selected>2</option>
+    <option value="3">3</option>
+    <option value="4+">4 o más</option>
+  </select>
+
+  <label>Año de construcción</label>
+  <input type="number" name="anio_construccion" min="1950" max="2100" placeholder="Ej: 2024">
+
   <label>Parroquia</label>
   <select name="parroquia">
     {% for op in logic.OPC_PARROQUIA %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
@@ -48,6 +96,13 @@
     {% for op in logic.OPC_ELECTRICIDAD %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
   </select>
 
+  <h2>Ubicación satelital del urbanismo</h2>
+  <p style="font-size:12px;color:#5B5346;margin-top:0;">Una sola ubicación para todo el conjunto (no por casa).</p>
+  <button type="button" class="secundario" onclick="capturarUbicacion()">📍 Usar mi ubicación actual (GPS)</button>
+  <p id="texto_gps" style="font-size:13px;color:#16294A;margin-top:8px;"></p>
+  <input type="hidden" name="latitud" id="latitud">
+  <input type="hidden" name="longitud" id="longitud">
+
   <h2>Tipología</h2>
   <label>¿Edificios o Casas?</label>
   <select name="tipo" id="tipo" onchange="mostrarCampos()">
@@ -80,5 +135,23 @@ function mostrarCampos() {
   document.getElementById("campos_casas").style.display = (tipo === "Casas") ? "block" : "none";
 }
 mostrarCampos();
+
+function capturarUbicacion() {
+  var texto = document.getElementById("texto_gps");
+  if (!navigator.geolocation) {
+    texto.textContent = "Tu navegador no permite obtener la ubicación.";
+    return;
+  }
+  texto.textContent = "Obteniendo ubicación...";
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    var lat = pos.coords.latitude.toFixed(6);
+    var lon = pos.coords.longitude.toFixed(6);
+    document.getElementById("latitud").value = lat;
+    document.getElementById("longitud").value = lon;
+    texto.textContent = "Ubicación capturada: " + lat + ", " + lon;
+  }, function(error) {
+    texto.textContent = "No se pudo obtener la ubicación (revisa el permiso de ubicación del navegador).";
+  }, { enableHighAccuracy: true, timeout: 10000 });
+}
 </script>
 {% endblock %}

@@ -23,8 +23,11 @@
     {% for op in opc_techo %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
   </select>
 
+  <label>Cantidad de baños común</label>
+  <input type="number" name="cantidad_banos" min="0" value="1">
+
   <label>Condición de baños</label>
-  <select name="banos">
+  <select name="condicion_banos">
     {% for op in logic.OPC_BANOS_COND %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
   </select>
 
@@ -35,6 +38,9 @@
 
   <label>Patología común</label>
   <input type="text" name="patologia" placeholder="Ninguna">
+
+  <label>% de avance de obra común</label>
+  <input type="number" name="avance_obra" min="0" max="100" value="100">
 
   <button type="submit">Continuar: registrar propietarios</button>
 </form>

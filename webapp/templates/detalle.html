@@ -28,8 +28,13 @@
     {% for op in opc_techo %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
   </select>
 
-  <label>Baños (cantidad y condición)</label>
-  <input type="text" name="banos" placeholder="Ej: 1, Completo">
+  <label>Cantidad de baños</label>
+  <input type="number" name="cantidad_banos" min="0" value="1">
+
+  <label>Condición de los baños</label>
+  <select name="condicion_banos">
+    {% for op in logic.OPC_BANOS_COND %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
 
   <label>Electricidad en la vivienda</label>
   <select name="electricidad_unidad">
@@ -39,8 +44,11 @@
   <label>Patología</label>
   <input type="text" name="patologia" placeholder="Ninguna, Grietas, Fisuras, Humedad, Filtraciones">
 
+  <label>% de avance de obra</label>
+  <input type="number" name="avance_obra" min="0" max="100" value="100">
+
   <label>Fotografía (opcional)</label>
-  <input type="file" name="foto" accept="image/*" capture="environment">
+  <input type="file" name="foto" accept="image/*">
 
   <button type="submit">Guardar unidad</button>
 </form>
