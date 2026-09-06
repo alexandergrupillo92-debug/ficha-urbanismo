@@ -87,6 +87,17 @@ def datos_generales():
             "urbanismo": session["urbanismo"],
             "fecha_inspeccion": f.get("fecha_inspeccion") or "",
             "ubicacion": f.get("ubicacion", ""),
+            "latitud": f.get("latitud", ""),
+            "longitud": f.get("longitud", ""),
+            "ente_ejecutor": f.get("ente_ejecutor", ""),
+            "tipologia": f.get("tipologia", ""),
+            "tecnologia_constructiva": f.get("tecnologia_constructiva", ""),
+            "area_m2": f.get("area_m2", ""),
+            "cuartos": f.get("cuartos", ""),
+            "banos_modelo": f.get("banos_modelo", ""),
+            "anio_construccion": f.get("anio_construccion", ""),
+            "inspector": f.get("inspector", ""),
+            "observaciones_generales": f.get("observaciones_generales", ""),
             "parroquia": f.get("parroquia"),
             "tenencia": f.get("tenencia"),
             "riesgos": f.get("riesgos") or "Ninguno",
@@ -136,6 +147,9 @@ def detalle():
 
     if request.method == "POST":
         f = request.form
+        cantidad_banos = f.get("cantidad_banos") or "0"
+        condicion_banos = f.get("condicion_banos") or "Completo"
+        banos = "Ninguno" if cantidad_banos in ("0", "") else f"{cantidad_banos}, {condicion_banos}"
         ruta_foto = guardar_foto(request.files.get("foto"), f"{sesion['urbanismo']}_{item['grupo']}_{item['unidad_sugerida']}")
         unidad = {
             "grupo": item["grupo"],
@@ -145,9 +159,10 @@ def detalle():
             "telefono": f.get("telefono", "").strip(),
             "friso": f.get("friso"),
             "techo": f.get("techo"),
-            "banos": f.get("banos") or "Ninguno",
+            "banos": banos,
             "electricidad_unidad": f.get("electricidad_unidad"),
             "patologia": f.get("patologia") or "Ninguna",
+            "avance_obra": f.get("avance_obra") or "100",
             "foto": ruta_foto,
         }
         sesion["unidades"].append(unidad)
@@ -179,12 +194,16 @@ def lote():
             return render_template("lote.html", pendientes=pendientes, logic=logic, opc_techo=opc_techo,
                                     error=f"Escribe un número entre 1 y {len(pendientes)}.")
         seleccionados = pendientes[:cantidad]
+        cantidad_banos = f.get("cantidad_banos") or "0"
+        condicion_banos = f.get("condicion_banos") or "Completo"
+        banos = "Ninguno" if cantidad_banos in ("0", "") else f"{cantidad_banos}, {condicion_banos}"
         return render_template(
             "lote_propietarios.html",
             seleccionados=seleccionados,
             logic=logic,
-            friso=f.get("friso"), techo=f.get("techo"), banos=f.get("banos"),
+            friso=f.get("friso"), techo=f.get("techo"), banos=banos,
             electricidad=f.get("electricidad"), patologia=f.get("patologia") or "Ninguna",
+            avance_obra=f.get("avance_obra") or "100",
         )
 
     return render_template("lote.html", pendientes=pendientes, logic=logic, opc_techo=opc_techo, error=None)
@@ -202,6 +221,7 @@ def lote_guardar():
     banos = f.get("banos")
     electricidad = f.get("electricidad")
     patologia = f.get("patologia") or "Ninguna"
+    avance_obra = f.get("avance_obra") or "100"
 
     grupos = f.getlist("grupo")
     unidades_sug = f.getlist("unidad_sugerida")
@@ -224,11 +244,21 @@ def lote_guardar():
             "banos": banos,
             "electricidad_unidad": electricidad,
             "patologia": patologia,
+            "avance_obra": avance_obra,
             "foto": ruta_foto,
         })
 
     logic.guardar_todo(sesion, CARPETA)
     return redirect(url_for("cola"))
+
+
+@app.route("/descargar_actual")
+def descargar_actual():
+    sesion = cargar_sesion_actual()
+    if not sesion:
+        return redirect(url_for("welcome"))
+    ruta = logic.guardar_todo(sesion, CARPETA)
+    return send_file(ruta, as_attachment=True)
 
 
 @app.route("/descargar/<nombre_archivo>")
