@@ -1,9 +1,11 @@
 import os
 import re
 import uuid
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
 
 import logic
+import logic_semaforo
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "cambia-esta-clave-en-produccion")
@@ -271,6 +273,62 @@ def descargar(nombre_archivo):
 def nuevo():
     session.pop("urbanismo", None)
     return redirect(url_for("welcome"))
+
+
+# ============================================================
+# REPORTE SEMÁFORO DE DAÑOS POST-SÍSMICO
+# ============================================================
+@app.route("/semaforo", methods=["GET", "POST"])
+def semaforo_nuevo():
+    if request.method == "GET":
+        return render_template("semaforo_form.html", logic_semaforo=logic_semaforo, datetime=datetime)
+
+    f = request.form
+    vivienda = f.get("vivienda", "").strip() or "Sin Identificar"
+
+    espacios = {}
+    for clave, _ in logic_semaforo.ESPACIOS_REGULARES:
+        ruta_foto = guardar_foto(request.files.get(f"foto_{clave}"), f"{vivienda}_{clave}")
+        espacios[clave] = {
+            "estructural": f.getlist(f"estructural_{clave}"),
+            "no_estructural": f.getlist(f"no_estructural_{clave}"),
+            "nota": f.get(f"nota_{clave}", ""),
+            "foto": ruta_foto,
+        }
+
+    ruta_foto_techo = guardar_foto(request.files.get("foto_techo"), f"{vivienda}_techo")
+    techo = {
+        "marcado": f.getlist("techo"),
+        "nota": f.get("nota_techo", ""),
+        "foto": ruta_foto_techo,
+    }
+
+    datos = {
+        "vivienda": vivienda,
+        "propietario": f.get("propietario", "").strip(),
+        "telefono": f.get("telefono", "").strip(),
+        "parroquia": f.get("parroquia", ""),
+        "tipologia": f.get("tipologia", ""),
+        "tecnologia_constructiva": f.get("tecnologia_constructiva", ""),
+        "ocupacion": f.get("ocupacion", ""),
+        "fecha": f.get("fecha") or datetime.now().strftime("%d/%m/%Y"),
+        "latitud": f.get("latitud", ""),
+        "longitud": f.get("longitud", ""),
+        "inspector": f.get("inspector", ""),
+        "generales": {
+            "inclinacion": f.get("inclinacion", ""),
+            "asentamiento": f.get("asentamiento", ""),
+            "riesgo_caida": f.get("riesgo_caida", ""),
+            "vecino_riesgo": f.get("vecino_riesgo", ""),
+            "servicios": f.get("servicios", ""),
+        },
+        "espacios": espacios,
+        "techo": techo,
+        "observaciones_generales": f.get("observaciones_generales", ""),
+    }
+
+    ruta_pdf, color_hex, etiqueta = logic_semaforo.generar_pdf(datos, CARPETA)
+    return render_template("semaforo_listo.html", nombre_archivo=os.path.basename(ruta_pdf), color_hex=color_hex, etiqueta=etiqueta)
 
 
 if __name__ == "__main__":
