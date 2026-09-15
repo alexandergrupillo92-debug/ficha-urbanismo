@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Informe de Inspección de Vivienda</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; background:#f4f6f5; margin:0; padding:24px; color:#1a1a1a; }
+  .card { max-width: 780px; margin: 0 auto; background:#fff; border-radius:10px; padding:28px 32px 36px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+  h1 { font-size:20px; border-bottom:3px solid #5C8C82; padding-bottom:10px; margin-bottom:4px; }
+  h2 { font-size:15px; background:#eaf1ef; padding:8px 10px; border-left:4px solid #5C8C82; margin-top:28px; }
+  label { display:block; font-weight:bold; font-size:13px; margin:12px 0 4px; }
+  input[type=text], input[type=date], input[type=number], select, textarea {
+    width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #c7d0ce; border-radius:6px;
+    font-family: Georgia, serif; font-size:14px;
+  }
+  textarea { min-height:70px; resize:vertical; }
+  .fila { display:flex; gap:16px; }
+  .fila > div { flex:1; }
+  .foto-item { border:1px dashed #c7d0ce; border-radius:8px; padding:12px; margin-top:10px; }
+  button { margin-top:26px; background:#5C8C82; color:#fff; border:none; padding:12px 22px; border-radius:6px; font-size:15px; cursor:pointer; }
+  button:hover { background:#487267; }
+  .ayuda { font-size:12px; color:#666; margin-top:2px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Informe de Inspección de Vivienda</h1>
+  <p class="ayuda">Dirección de Vivienda y Hábitat — Alcaldía del Municipio Bolivariano de Brión</p>
+  {% if error %}
+  <p style="background:#fbe7e7; color:#a33; padding:10px 12px; border-radius:6px; font-size:13px;">{{ error }}</p>
+  {% endif %}
+
+  <form action="/informe" method="post" enctype="multipart/form-data">
+
+    <h2>Fecha</h2>
+    <label>Fecha del informe</label>
+    <input type="date" name="fecha" required>
+
+    <h2>1. Datos Generales</h2>
+    <div class="fila">
+      <div>
+        <label>Dirección del inmueble</label>
+        <input type="text" name="direccion" placeholder="Comunidad, calle, casa N°" required>
+
+        <label>Parroquia</label>
+        <select name="parroquia" required>
+          <option value="Higuerote">Higuerote</option>
+          <option value="Curiepe">Curiepe</option>
+          <option value="Tacarigua">Tacarigua</option>
+        </select>
+
+        <label>Tipo de vivienda</label>
+        <input type="text" name="tipo_vivienda" placeholder="Ej: Unifamiliar de concreto armado, 1 nivel (m²)" required>
+
+        <label>Ambientes</label>
+        <input type="text" name="ambientes" placeholder="Ej: 4 habitaciones, 1 baño, cocina, sala" required>
+      </div>
+      <div>
+        <label>Nombre del ocupante</label>
+        <input type="text" name="nombre" required>
+
+        <label>Cédula</label>
+        <input type="text" name="cedula" placeholder="V-12.345.678" required>
+
+        <label>Teléfono</label>
+        <input type="text" name="telefono" required>
+
+        <label>Habitantes</label>
+        <div class="fila">
+          <div>
+            <select name="adultos" required>
+              <option value="">Adultos</option>
+              <option>0</option><option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+            </select>
+          </div>
+          <div>
+            <select name="menores" required>
+              <option value="">Menores</option>
+              <option>0</option><option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6</option><option>7</option><option>8</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Condición del ocupante</label>
+        <select name="condicion" required>
+          <option value="Propietario(a)">Propietario(a)</option>
+          <option value="Alquilado(a)">Alquilado(a)</option>
+          <option value="Al cuido">Al cuido</option>
+          <option value="Heredero(a)">Heredero(a)</option>
+        </select>
+      </div>
+    </div>
+
+    <h2>2. Descripción de la Inspección Ocular</h2>
+    <label>Estructura</label>
+    <textarea name="obs_estructura" required></textarea>
+    <label>Techo / cubierta</label>
+    <textarea name="obs_techo" required></textarea>
+    <label>Instalaciones eléctricas</label>
+    <textarea name="obs_electricas" required></textarea>
+    <label>Instalaciones sanitarias</label>
+    <textarea name="obs_sanitarias" required></textarea>
+    <label>Acabados</label>
+    <textarea name="obs_acabados" required></textarea>
+
+    <h2>3. Recomendaciones</h2>
+    <label>Una recomendación por línea (se numeran automáticamente)</label>
+    <textarea name="recomendaciones" style="min-height:120px" required></textarea>
+
+    <h2>4. Registro Fotográfico</h2>
+    <p class="ayuda">Sube exactamente 4 fotos, en orden. Se recortan y ajustan solas a 6cm x 6cm.</p>
+    <div class="foto-item">
+      <label>Foto 1</label>
+      <input type="file" name="fotos" accept="image/*" required>
+      <label>Leyenda Fig. 1</label>
+      <input type="text" name="caption_1" placeholder="Fig. 1 — ...">
+    </div>
+    <div class="foto-item">
+      <label>Foto 2</label>
+      <input type="file" name="fotos" accept="image/*" required>
+      <label>Leyenda Fig. 2</label>
+      <input type="text" name="caption_2" placeholder="Fig. 2 — ...">
+    </div>
+    <div class="foto-item">
+      <label>Foto 3</label>
+      <input type="file" name="fotos" accept="image/*" required>
+      <label>Leyenda Fig. 3</label>
+      <input type="text" name="caption_3" placeholder="Fig. 3 — ...">
+    </div>
+    <div class="foto-item">
+      <label>Foto 4</label>
+      <input type="file" name="fotos" accept="image/*" required>
+      <label>Leyenda Fig. 4</label>
+      <input type="text" name="caption_4" placeholder="Fig. 4 — ...">
+    </div>
+
+    <button type="submit">Generar informe (.docx)</button>
+  </form>
+</div>
+</body>
+</html>
