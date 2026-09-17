@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ficha Familiar de Hábitat y Vivienda</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; background:#f4f6f5; margin:0; padding:24px; color:#1a1a1a; }
+  .card { max-width: 900px; margin: 0 auto; background:#fff; border-radius:10px; padding:28px 32px 36px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+  h1 { font-size:20px; border-bottom:3px solid #5C8C82; padding-bottom:10px; margin-bottom:4px; }
+  h2 { font-size:15px; background:#eaf1ef; padding:8px 10px; border-left:4px solid #5C8C82; margin-top:28px; }
+  label { display:block; font-weight:bold; font-size:12px; margin:10px 0 3px; }
+  input[type=text], textarea {
+    width:100%; box-sizing:border-box; padding:7px 9px; border:1px solid #c7d0ce; border-radius:6px;
+    font-family: Georgia, serif; font-size:13px;
+  }
+  textarea { min-height:60px; resize:vertical; }
+  .fila { display:flex; gap:14px; flex-wrap:wrap; }
+  .fila > div { flex:1; min-width:150px; }
+  .persona { border:1px solid #e3e8e6; border-radius:8px; padding:12px 14px; margin-top:10px; }
+  .persona h3 { font-size:13px; margin:0 0 6px; color:#3c5c53; }
+  .persona .fila > div { min-width:110px; }
+  button { margin-top:26px; background:#5C8C82; color:#fff; border:none; padding:12px 22px; border-radius:6px; font-size:15px; cursor:pointer; }
+  button:hover { background:#487267; }
+  .ayuda { font-size:12px; color:#666; margin-top:2px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Ficha Familiar de Hábitat y Vivienda</h1>
+  <p class="ayuda">Dirección de Vivienda y Hábitat — Alcaldía del Municipio Bolivariano de Brión</p>
+
+  <form action="/ficha_familiar" method="post">
+
+    <h2>Información del Jefe (a) Familiar</h2>
+    <div class="fila">
+      <div><label>Nombres</label><input type="text" name="nombres"></div>
+      <div><label>Apellidos</label><input type="text" name="apellidos"></div>
+    </div>
+    <div class="fila">
+      <div><label>Cédula (V-)</label><input type="text" name="cedula"></div>
+      <div><label>Fecha de Nacimiento</label><input type="text" name="fecha_nacimiento" placeholder="dd/mm/aaaa"></div>
+    </div>
+    <div class="fila">
+      <div><label>Número de Teléfono</label><input type="text" name="telefono"></div>
+      <div><label>Correo</label><input type="text" name="correo"></div>
+      <div><label>Código</label><input type="text" name="codigo"></div>
+      <div><label>Serial</label><input type="text" name="serial"></div>
+    </div>
+    <label>Dirección Actual</label>
+    <input type="text" name="direccion">
+    <div class="fila">
+      <div><label>Estado</label><input type="text" name="estado" value="Miranda"></div>
+      <div><label>Municipio</label><input type="text" name="municipio" value="Brión"></div>
+      <div><label>Parroquia</label><input type="text" name="parroquia"></div>
+    </div>
+    <div class="fila">
+      <div><label>Grado de Estudio/Profesión</label><input type="text" name="grado_estudio"></div>
+      <div><label>Ocupación</label><input type="text" name="ocupacion_jefe"></div>
+    </div>
+    <label>Descripción del Caso</label>
+    <textarea name="descripcion_caso"></textarea>
+
+    <h2>Información del Núcleo Familiar</h2>
+    <p class="ayuda">Hasta 5 personas. Deja en blanco las que no apliquen.</p>
+
+    <div class="persona">
+      <h3>Persona 1</h3>
+      <div class="fila">
+        <div><label>Nombre y Apellido</label><input type="text" name="n1_nombre"></div>
+        <div><label>C.I</label><input type="text" name="n1_ci"></div>
+        <div><label>Fecha de Nacimiento</label><input type="text" name="n1_fecha"></div>
+        <div><label>Edad</label><input type="text" name="n1_edad"></div>
+      </div>
+      <div class="fila">
+        <div><label>Parentesco</label><input type="text" name="n1_parentesco"></div>
+        <div><label>Ocupación</label><input type="text" name="n1_ocupacion"></div>
+        <div><label>Escolaridad (niños/adolescentes)</label><input type="text" name="n1_escolaridad"></div>
+        <div><label>Discapacidad o Enfermedad</label><input type="text" name="n1_discapacidad"></div>
+      </div>
+      <label>Observación</label>
+      <input type="text" name="n1_observacion">
+    </div>
+
+    <div class="persona">
+      <h3>Persona 2</h3>
+      <div class="fila">
+        <div><label>Nombre y Apellido</label><input type="text" name="n2_nombre"></div>
+        <div><label>C.I</label><input type="text" name="n2_ci"></div>
+        <div><label>Fecha de Nacimiento</label><input type="text" name="n2_fecha"></div>
+        <div><label>Edad</label><input type="text" name="n2_edad"></div>
+      </div>
+      <div class="fila">
+        <div><label>Parentesco</label><input type="text" name="n2_parentesco"></div>
+        <div><label>Ocupación</label><input type="text" name="n2_ocupacion"></div>
+        <div><label>Escolaridad (niños/adolescentes)</label><input type="text" name="n2_escolaridad"></div>
+        <div><label>Discapacidad o Enfermedad</label><input type="text" name="n2_discapacidad"></div>
+      </div>
+      <label>Observación</label>
+      <input type="text" name="n2_observacion">
+    </div>
+
+    <div class="persona">
+      <h3>Persona 3</h3>
+      <div class="fila">
+        <div><label>Nombre y Apellido</label><input type="text" name="n3_nombre"></div>
+        <div><label>C.I</label><input type="text" name="n3_ci"></div>
+        <div><label>Fecha de Nacimiento</label><input type="text" name="n3_fecha"></div>
+        <div><label>Edad</label><input type="text" name="n3_edad"></div>
+      </div>
+      <div class="fila">
+        <div><label>Parentesco</label><input type="text" name="n3_parentesco"></div>
+        <div><label>Ocupación</label><input type="text" name="n3_ocupacion"></div>
+        <div><label>Escolaridad (niños/adolescentes)</label><input type="text" name="n3_escolaridad"></div>
+        <div><label>Discapacidad o Enfermedad</label><input type="text" name="n3_discapacidad"></div>
+      </div>
+      <label>Observación</label>
+      <input type="text" name="n3_observacion">
+    </div>
+
+    <div class="persona">
+      <h3>Persona 4</h3>
+      <div class="fila">
+        <div><label>Nombre y Apellido</label><input type="text" name="n4_nombre"></div>
+        <div><label>C.I</label><input type="text" name="n4_ci"></div>
+        <div><label>Fecha de Nacimiento</label><input type="text" name="n4_fecha"></div>
+        <div><label>Edad</label><input type="text" name="n4_edad"></div>
+      </div>
+      <div class="fila">
+        <div><label>Parentesco</label><input type="text" name="n4_parentesco"></div>
+        <div><label>Ocupación</label><input type="text" name="n4_ocupacion"></div>
+        <div><label>Escolaridad (niños/adolescentes)</label><input type="text" name="n4_escolaridad"></div>
+        <div><label>Discapacidad o Enfermedad</label><input type="text" name="n4_discapacidad"></div>
+      </div>
+      <label>Observación</label>
+      <input type="text" name="n4_observacion">
+    </div>
+
+    <div class="persona">
+      <h3>Persona 5</h3>
+      <div class="fila">
+        <div><label>Nombre y Apellido</label><input type="text" name="n5_nombre"></div>
+        <div><label>C.I</label><input type="text" name="n5_ci"></div>
+        <div><label>Fecha de Nacimiento</label><input type="text" name="n5_fecha"></div>
+        <div><label>Edad</label><input type="text" name="n5_edad"></div>
+      </div>
+      <div class="fila">
+        <div><label>Parentesco</label><input type="text" name="n5_parentesco"></div>
+        <div><label>Ocupación</label><input type="text" name="n5_ocupacion"></div>
+        <div><label>Escolaridad (niños/adolescentes)</label><input type="text" name="n5_escolaridad"></div>
+        <div><label>Discapacidad o Enfermedad</label><input type="text" name="n5_discapacidad"></div>
+      </div>
+      <label>Observación</label>
+      <input type="text" name="n5_observacion">
+    </div>
+
+    <button type="submit">Generar Ficha Familiar (.docx)</button>
+  </form>
+</div>
+</body>
+</html>
