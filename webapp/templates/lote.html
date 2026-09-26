@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Carga por lote</h1>
+<p class="progreso">
+  Desde: {{ pendientes[0].grupo }} - {{ pendientes[0].unidad_sugerida }}<br>
+  Máximo disponible: {{ pendientes|length }}
+</p>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<form method="POST">
+  <label>Cantidad de unidades consecutivas</label>
+  <input type="number" name="cantidad" min="1" max="{{ pendientes|length }}" required>
+
+  <h2>Etapa constructiva común del lote</h2>
+
+  <label>Etapa constructiva actual</label>
+  <select name="etapa_actual">
+    {% for op in logic.OPC_ETAPA_CONSTRUCTIVA %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>% dentro de esa etapa (no aplica si es "Culminada")</label>
+  <input type="number" name="porcentaje_etapa" min="0" max="100" value="0">
+
+  <button type="submit">Continuar: registrar propietarios</button>
+</form>
+{% endblock %}

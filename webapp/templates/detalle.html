@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>{{ item.grupo }}</h1>
+<p class="progreso">Sugerido: {{ item.unidad_sugerida }}</p>
+
+<form method="POST" enctype="multipart/form-data">
+  <label>Identificador de unidad</label>
+  <input type="text" name="unidad" value="{{ item.unidad_sugerida }}">
+
+  <label>Estatus de ocupación (opcional)</label>
+  <select name="estatus">
+    <option value="">-- Sin especificar --</option>
+    {% for op in logic.OPC_ESTATUS %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>Nombre del propietario (opcional)</label>
+  <input type="text" name="propietario" placeholder="Sin Identificar">
+
+  <label>Número de teléfono (opcional)</label>
+  <input type="tel" name="telefono" placeholder="Ej: 0414-1234567">
+
+  <label>Etapa constructiva actual</label>
+  <select name="etapa_actual">
+    {% for op in logic.OPC_ETAPA_CONSTRUCTIVA %}<option value="{{ op }}">{{ op }}</option>{% endfor %}
+  </select>
+
+  <label>% dentro de esa etapa (no aplica si es "Culminada")</label>
+  <input type="number" name="porcentaje_etapa" min="0" max="100" value="0">
+
+  <label>Fotografía (opcional)</label>
+  <input type="file" name="foto" accept="image/*">
+
+  <button type="submit">Guardar unidad</button>
+</form>
+{% endblock %}
